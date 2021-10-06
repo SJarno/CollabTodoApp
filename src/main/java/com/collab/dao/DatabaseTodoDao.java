@@ -25,10 +25,12 @@ public class DatabaseTodoDao implements Dao<Todo, Integer> {
     @Override
     public void create(Todo todo) throws SQLException {
         PreparedStatement pStatement = connection
-                .prepareStatement("INSERT INTO Todos (heading, content, done) VALUES (?, ?, ?);");
+                .prepareStatement("INSERT INTO Todos (heading, content, done, time_stamp) VALUES (?, ?, ?, ?);");
         pStatement.setString(1, todo.getHeading());
         pStatement.setString(2, todo.getContent());
         pStatement.setString(3, todo.convertDone());
+        /* pStatement.setString(4, todo.getDate().toString()); */
+        pStatement.setTimestamp(4, todo.localDateTimeToTimeStamp());
 
         pStatement.executeUpdate();
         pStatement.close();
@@ -44,7 +46,7 @@ public class DatabaseTodoDao implements Dao<Todo, Integer> {
 
         return resultSet.next()
                 ? new Todo(resultSet.getInt("id"), resultSet.getString("heading"), resultSet.getString("content"),
-                        resultSet.getString("done"))
+                        resultSet.getString("done"), resultSet.getTimestamp("time_stamp"))
                 : null;
     }
 
@@ -78,10 +80,9 @@ public class DatabaseTodoDao implements Dao<Todo, Integer> {
         ResultSet resultSet = pStatement.executeQuery();
         while (resultSet.next()) {
             todos.add(new Todo(resultSet.getInt("id"), resultSet.getString("heading"), resultSet.getString("content"),
-                    resultSet.getString("done")));
+                    resultSet.getString("done"), resultSet.getTimestamp("time_stamp")));
         }
         return todos;
     }
-    
 
 }

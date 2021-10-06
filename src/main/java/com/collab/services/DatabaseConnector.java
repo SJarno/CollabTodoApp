@@ -35,7 +35,8 @@ public class DatabaseConnector {
                 + "id INTEGER PRIMARY KEY, \n" 
                 + "heading TEXT check(length(heading) <= 20), \n"
                 + "content TEXT check(length(content) <= 500), \n" 
-                + "done TEXT NOT NULL check(done = 'false' OR done = 'true'));";
+                + "done TEXT NOT NULL check(done = 'false' OR done = 'true'), \n"
+                +"time_stamp INTEGER NOT NULL);";
 
                 // try w/resources, closes the connection after use
                 try (Connection connection = createConnection()) {

@@ -1,10 +1,15 @@
 package com.collab.domain;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
+
 public class Todo {
     private int id;
     private String heading;
     private String content;
     private boolean done;
+    private LocalDateTime localTime;
     // date when created
     // start date
     // expiration date
@@ -18,23 +23,38 @@ public class Todo {
      * @param done    is todo done @return true/false
      */
 
-     /**
-      * Constructor for reading tododao 
-       */ 
-    public Todo(int id, String heading, String content, String done) {
+    /**
+     * Constructor for reading tododao
+     */
+    public Todo(int id, String heading, String content, String done, Timestamp timestamp) {
         this.id = id;
         this.heading = heading;
         this.content = content;
         this.done = convertStrToBool(done);
+        this.localTime = timeStampToLocaltime(timestamp);
     }
+
     /**
      * Construtor when creating new tododao
-     *  */
+     */
     public Todo(String heading, String content) {
         this.id = -1;
         this.heading = heading;
         this.content = content;
         this.done = false;
+        this.localTime = LocalDateTime.now();
+    }
+
+    public LocalDateTime getDate() {
+        return localTime;
+    }
+
+    public Timestamp localDateTimeToTimeStamp() {
+        return Timestamp.valueOf(localTime);
+    }
+
+    public LocalDateTime timeStampToLocaltime(Timestamp timestamp) {
+        return timestamp.toLocalDateTime();
     }
 
     public int getId() {
@@ -67,22 +87,27 @@ public class Todo {
     public void toggleDone() {
         this.done = done ? false : true;
     }
+
     /**
-     * Converts current boolean done value to String value, for sqlite database 
+     * Converts current boolean done value to String value, for sqlite database
      */
     public String convertDone() {
         return String.valueOf(done);
     }
+
     /**
-    * Converts given string value to bool if applicable
+     * Converts given string value to bool if applicable
      */
     public boolean convertStrToBool(String n) {
         return Boolean.valueOf(n);
     }
+
     /* Do we really need this? */
     @Override
     public String toString() {
-        return "id: "+id+"\nHeading: "+heading+"\nDone? "+done;
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
+        return "id: " + id + "\nHeading: " + heading + "\nDone? " + done + "\nTime created: "
+                + localTime.format(formatter);
     }
 
 }

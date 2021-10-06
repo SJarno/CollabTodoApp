@@ -5,16 +5,23 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 public class TodoTest {
     private Todo readTodo;
     private Todo writeTodo;
+    private LocalDateTime localDateTime;
+    private Timestamp timestamp;
 
     @BeforeEach
     public void setUp() {
-        readTodo = new Todo(1, "Otsikko", "sisältää juu", "false");
+        localDateTime = LocalDateTime.now();
+        timestamp = Timestamp.valueOf(localDateTime);
+        readTodo = new Todo(1, "Otsikko", "sisältää juu", "false", timestamp);
         writeTodo = new Todo("Uusi Todo", "Kirjoitettava otsikko");
     }
 
